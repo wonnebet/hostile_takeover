@@ -1,5 +1,5 @@
 {
-	"name": "Hostile Takeover",
+	"name": "hostile_takeover",
 	"version": "0.0.1",
 	"description": "A quick-paced multiplayer game set in an office environment.",
 	"dependencies": {
@@ -7,5 +7,5 @@
 		"express": "latest",
 		"ejs": "latest"
 	},
-	"author": "twonneberger"
+	"author": "huey"
 }
