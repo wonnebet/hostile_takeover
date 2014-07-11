@@ -32,12 +32,12 @@ $ ->
 	$field = $('#field')
 	$sendButton = $('#send')
 
-	$window.focus ->
+	$window.on 'focus', (event) ->
 		windowFocus = yes
 		pageTitleNotification.off()
 		yes
 
-	$window.blur ->
+	$window.on 'blur', (event) ->
 		windowFocus = no
 		yes
 
@@ -50,7 +50,9 @@ $ ->
 				html += "#{htmlEntities(messages[i].message)}<br>"
 			$content.html(html)
 			$content.scrollTop($content[0].scrollHeight)
-			if data.username and data.username isnt $name.val() and not windowFocus then pageTitleNotification.on(data.username + " says " + data.message, 1500)
+			if data.username and data.username isnt $name.val() and not windowFocus
+				pageTitleNotification.off()
+				pageTitleNotification.on(data.username + " says " + data.message, 1500)
 		else
 			console.log("There is a problem: #{data}")
 		yes
