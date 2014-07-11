@@ -61,6 +61,7 @@ $ ->
 		else
 			name = $username.val()
 			$name.html(name)
+			socket.emit('send', {message: "#{name} just joined the chat"})
 			$joinGame.collapse('hide')
 			$playGame.collapse('show')
 			$field.trigger('focus')
