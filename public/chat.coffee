@@ -1,4 +1,4 @@
-name = '<slapjack>'
+name = '&lt;anon&gt;'
 
 htmlEntities = (string) ->
 	String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
