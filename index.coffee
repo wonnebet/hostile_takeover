@@ -13,7 +13,7 @@ app.use(express.static("#{__dirname}/public"))
 io = require('socket.io').listen(app.listen(port))
 
 io.sockets.on 'connection', (socket) ->
-	socket.emit('message', {message: 'Welcome to the Hostile Takeover'})
+	socket.emit('message', {message: 'Welcome to <strong>Hostile Takeover</strong>!'})
 	socket.on 'send', (data) ->
 		io.sockets.emit('message', data)
 
