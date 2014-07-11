@@ -44,12 +44,12 @@ $(function() {
   $name = $('#name');
   $field = $('#field');
   $sendButton = $('#send');
-  $window.focus(function() {
+  $window.on('focus', function(event) {
     windowFocus = true;
     pageTitleNotification.off();
     return true;
   });
-  $window.blur(function() {
+  $window.on('blur', function(event) {
     windowFocus = false;
     return true;
   });
@@ -65,6 +65,7 @@ $(function() {
       $content.html(html);
       $content.scrollTop($content[0].scrollHeight);
       if (data.username && data.username !== $name.val() && !windowFocus) {
+        pageTitleNotification.off();
         pageTitleNotification.on(data.username + " says " + data.message, 1500);
       }
     } else {
