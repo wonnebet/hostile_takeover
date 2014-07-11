@@ -31,27 +31,28 @@ pageTitleNotification = {
 };
 
 $(function() {
-  var $content, $field, $joinButton, $joinGame, $name, $playGame, $sendButton, $username, joinGame, messages, sendMessage, socket, window_focus;
-  window_focus = true;
-  $(window).focus(function() {
-    window_focus = true;
-    pageTitleNotification.off();
-    return true;
-  });
-  $(window).blur(function() {
-    window_focus = false;
-    return true;
-  });
-  messages = [];
+  var $content, $field, $joinButton, $joinGame, $name, $playGame, $sendButton, $username, $window, joinGame, messages, sendMessage, socket, windowFocus;
+  $window = $(window);
+  windowFocus = true;
   socket = io.connect(window.location.origin);
+  messages = [];
   $joinGame = $('#join-game');
   $username = $('#username');
   $joinButton = $('#join');
   $playGame = $('#play-game');
+  $content = $('#content');
   $name = $('#name');
   $field = $('#field');
   $sendButton = $('#send');
-  $content = $('#content');
+  $window.on('focus', function(event) {
+    windowFocus = true;
+    pageTitleNotification.off();
+    return true;
+  });
+  $window.on('blur', function(event) {
+    windowFocus = false;
+    return true;
+  });
   socket.on('message', function(data) {
     var html, i, _i, _ref;
     if (data.message) {
@@ -63,7 +64,7 @@ $(function() {
       }
       $content.html(html);
       $content.scrollTop($content[0].scrollHeight);
-      if (data.username && data.username !== $name.val() && !window_focus) {
+      if (data.username && data.username !== $name.val() && !windowFocus) {
         pageTitleNotification.on("New Message!", 2000);
       }
     } else {

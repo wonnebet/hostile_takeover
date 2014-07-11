@@ -19,26 +19,27 @@ pageTitleNotification =
 		yes
 
 $ ->
-	window_focus = true
-	$(window).focus ->
-		window_focus = true
-		pageTitleNotification.off()
-		yes
-
-	$(window).blur ->
-		window_focus = false
-		yes
-
-	messages = []
+	$window = $(window)
+	windowFocus = yes
 	socket = io.connect(window.location.origin)
+	messages = []
 	$joinGame = $('#join-game')
 	$username = $('#username')
 	$joinButton = $('#join')
 	$playGame = $('#play-game')
+	$content = $('#content')
 	$name = $('#name')
 	$field = $('#field')
 	$sendButton = $('#send')
-	$content = $('#content')
+
+	$window.on 'focus', (event) ->
+		windowFocus = yes
+		pageTitleNotification.off()
+		yes
+
+	$window.on 'blur', (event) ->
+		windowFocus = no
+		yes
 
 	socket.on 'message', (data) ->
 		if data.message
@@ -49,7 +50,7 @@ $ ->
 				html += "#{htmlEntities(messages[i].message)}<br>"
 			$content.html(html)
 			$content.scrollTop($content[0].scrollHeight)
-			if data.username and data.username isnt $name.val() and not window_focus then pageTitleNotification.on("New Message!", 2000)
+			if data.username and data.username isnt $name.val() and not windowFocus then pageTitleNotification.on("New Message!", 2000)
 		else
 			console.log("There is a problem: #{data}")
 		yes
