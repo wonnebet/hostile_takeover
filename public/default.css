@@ -1,0 +1,8 @@
+#content {
+	height: 300px;
+	overflow-y: scroll;
+	background-color: #4F124C;
+	color: #FFF;
+	padding: 10px;
+	margin: 10px 0;
+}
