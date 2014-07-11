@@ -14,5 +14,5 @@ Once the dependencies have installed successfully, you can run `node index.js` t
 
 The default port is `4839`
 
-Now you should be able to browse to [http://localhost:4839](http://localhost:4839) to see the Hostile Takeover app running.
+Now you should be able to browse to <a href="http://localhost:4839" target="_blank">http://localhost:4839</a> to see the Hostile Takeover app running.
 
