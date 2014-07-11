@@ -22,7 +22,7 @@ $ ->
 	$window = $(window)
 	windowFocus = yes
 	socket = io.connect(window.location.origin)
-	messages = []
+	logs = []
 	$joinGame = $('#join-game')
 	$username = $('#username')
 	$joinButton = $('#join')
@@ -43,16 +43,17 @@ $ ->
 
 	socket.on 'message', (data) ->
 		if data.message
-			messages.push(data)
-			html = ''
-			for i in [0...messages.length]
-				html += "<strong>#{htmlEntities(if messages[i].username then messages[i].username else 'Server')}:</strong> "
-				html += "#{htmlEntities(messages[i].message)}<br>"
-			$content.html(html)
-			$content.scrollTop($content[0].scrollHeight)
-			if data.username and data.username isnt $name.val() and not windowFocus
+			logs.push(data)
+			username = if data.username then data.username else 'Server'
+			text = data.message
+			$message = $('<div>', {class: 'message'})
+			$message.append($('<strong>', {html: "#{username}: "}))
+			$message.append(text)
+			$content.append($message)
+			$content.scrollTop($content.prop('scrollHeight'))
+			if data.username and username isnt name and not windowFocus
 				pageTitleNotification.off()
-				pageTitleNotification.on(data.username + " says " + data.message, 1500)
+				pageTitleNotification.on("#{username} says #{text}", 1500)
 		else
 			console.log("There is a problem: #{data}")
 		yes
@@ -61,9 +62,9 @@ $ ->
 		if $username.val() is ''
 			alert('Please type your name!')
 		else
-			name = $username.val()
+			name = htmlEntities($username.val())
 			$name.html(name)
-			socket.emit('send', {message: "#{name} just joined the chat"})
+			socket.emit('send', {message: "<em>#{name} just joined the chat</em>"})
 			$joinGame.collapse('hide')
 			$playGame.collapse('show')
 			$field.trigger('focus')
@@ -82,7 +83,7 @@ $ ->
 		if name is ''
 			alert('Please type your name!')
 		else
-			text = $field.val()
+			text = htmlEntities($field.val())
 			socket.emit('send', {username: name, message: text})
 			$field.val('')
 		yes

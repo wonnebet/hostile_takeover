@@ -31,11 +31,11 @@ pageTitleNotification = {
 };
 
 $(function() {
-  var $content, $field, $joinButton, $joinGame, $name, $playGame, $sendButton, $username, $window, joinGame, messages, sendMessage, socket, windowFocus;
+  var $content, $field, $joinButton, $joinGame, $name, $playGame, $sendButton, $username, $window, joinGame, logs, sendMessage, socket, windowFocus;
   $window = $(window);
   windowFocus = true;
   socket = io.connect(window.location.origin);
-  messages = [];
+  logs = [];
   $joinGame = $('#join-game');
   $username = $('#username');
   $joinButton = $('#join');
@@ -54,19 +54,23 @@ $(function() {
     return true;
   });
   socket.on('message', function(data) {
-    var html, i, _i, _ref;
+    var $message, text, username;
     if (data.message) {
-      messages.push(data);
-      html = '';
-      for (i = _i = 0, _ref = messages.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-        html += "<strong>" + (htmlEntities(messages[i].username ? messages[i].username : 'Server')) + ":</strong> ";
-        html += "" + (htmlEntities(messages[i].message)) + "<br>";
-      }
-      $content.html(html);
-      $content.scrollTop($content[0].scrollHeight);
-      if (data.username && data.username !== $name.val() && !windowFocus) {
+      logs.push(data);
+      username = data.username ? data.username : 'Server';
+      text = data.message;
+      $message = $('<div>', {
+        "class": 'message'
+      });
+      $message.append($('<strong>', {
+        html: "" + username + ": "
+      }));
+      $message.append(text);
+      $content.append($message);
+      $content.scrollTop($content.prop('scrollHeight'));
+      if (data.username && username !== name && !windowFocus) {
         pageTitleNotification.off();
-        pageTitleNotification.on(data.username + " says " + data.message, 1500);
+        pageTitleNotification.on("" + username + " says " + text, 1500);
       }
     } else {
       console.log("There is a problem: " + data);
@@ -77,10 +81,10 @@ $(function() {
     if ($username.val() === '') {
       alert('Please type your name!');
     } else {
-      name = $username.val();
+      name = htmlEntities($username.val());
       $name.html(name);
       socket.emit('send', {
-        message: "" + name + " just joined the chat"
+        message: "<em>" + name + " just joined the chat</em>"
       });
       $joinGame.collapse('hide');
       $playGame.collapse('show');
@@ -103,7 +107,7 @@ $(function() {
     if (name === '') {
       alert('Please type your name!');
     } else {
-      text = $field.val();
+      text = htmlEntities($field.val());
       socket.emit('send', {
         username: name,
         message: text

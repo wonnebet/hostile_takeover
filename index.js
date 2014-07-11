@@ -23,7 +23,7 @@ io = require('socket.io').listen(app.listen(port));
 
 io.sockets.on('connection', function(socket) {
   socket.emit('message', {
-    message: 'Welcome to the Hostile Takeover'
+    message: 'Welcome to <strong>Hostile Takeover</strong>!'
   });
   return socket.on('send', function(data) {
     return io.sockets.emit('message', data);
